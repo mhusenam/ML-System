@@ -8,9 +8,9 @@ import numpy as np
 mlflow.set_tracking_uri("http://127.0.0.1:5000/")
 
 # Create a new MLflow Experiment
-mlflow.set_experiment("Latihan Credit Scoring")
+mlflow.set_experiment("Latihan Credit Scoringg")
 
-data = pd.read_csv("train_pca.csv")
+data = pd.read_csv("ML-System/Modul 4 - Serving Model dengan Gaya/Latihan Prediksi Run_ID/train_pca.csv")
 
 X_train, X_test, y_train, y_test = train_test_split(
     data.drop("Credit_Score", axis=1),

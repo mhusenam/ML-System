@@ -99,10 +99,36 @@ def prediction(data):
         str: Prediction result (Good, Standard, or Poor)
     """
     # URL endpoint dari model yang sedang di-serve
-    url = "http://localhost:5005/invocations"
+    url = "http://127.0.0.1:5004/invocations"
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, data=data, headers=headers)
     response = response.json().get("predictions")
     result_target = joblib.load("model/encoder_target.joblib")
     final_result = result_target.inverse_transform(response)
     return final_result
+
+# 1. Siapkan Data Mentah (sesuaikan dengan kolom di modul)
+columns = [
+    "Credit_Mix", "Payment_of_Min_Amount", "Payment_Behaviour", "Age", "Num_Bank_Accounts", "Num_Credit_Card",
+    "Interest_Rate", "Num_of_Loan", "Delay_from_due_date", "Num_of_Delayed_Payment", "Changed_Credit_Limit",
+    "Num_Credit_Inquiries", "Outstanding_Debt", "Monthly_Inhand_Salary", "Monthly_Balance",
+    "Amount_invested_monthly", "Total_EMI_per_month", "Credit_History_Age"
+]
+
+# Contoh data dummy
+sample_data = ["Good","No","Low_spent_Small_value_payments",23,3,4,3,4,3,7,11.27,5,809.98,1824.80,186.26,236.64,49.50,216]
+
+# 2. Proses Datanya
+df_mentah = pd.DataFrame([sample_data], columns=columns)
+df_siap = data_preprocessing(data=df_mentah)
+
+# 3. Bungkus jadi JSON format 'dataframe_split'
+json_output = {
+    "dataframe_split": {
+        "columns": df_siap.columns.tolist(),
+        "data": df_siap.values.tolist()
+    }
+}
+
+# 4. Tembak ke server dan print hasilnya
+print("Hasil Prediksi:", prediction(json.dumps(json_output)))
