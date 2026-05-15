@@ -37,21 +37,21 @@ jobs:
           pip install mlflow  
           
       # Run as a mlflow project
-      - name: Run mlflow project
-        run: |
-          mlflow run MLproject --env-manager=local 
+      #- name: Run mlflow project
+       # run: |
+        #  mlflow run MLproject --env-manager=local 
       
       # Get latest run_id
-      - name: Get latest MLflow run_id
-        run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
-          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "Latest run_id: $RUN_ID"
+      #- name: Get latest MLflow run_id
+       # run: |
+        #  RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+         # echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          #echo "Latest run_id: $RUN_ID"
           
       # Build Docker Model
-      - name: Build Docker Model
+      - name: Build Docker image
         run: |
-          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc" 
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cc:latest ./mlflow-dockerfile
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
