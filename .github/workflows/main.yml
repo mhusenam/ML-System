@@ -51,7 +51,7 @@ jobs:
       # Build Docker Model
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cc:latest ./mlflow-dockerfile
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/cc:latest -f mlflow-dockerfile/Dockerfile mlflow-dockerfile/
 
       # Login to Docker Hub
       - name: Log in to Docker Hub
